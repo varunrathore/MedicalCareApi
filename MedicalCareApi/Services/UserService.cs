@@ -48,7 +48,7 @@ namespace MedicalCareApi.Services
             return _mapper.Map<UserDto>(newUser);
         }
 
-        public async Task<LoginResponseDto?> LoginAsync(LoginRequestDto request)
+        public async Task<LoginResponseDto?> LoginUserAsync(LoginRequestDto request)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -64,6 +64,24 @@ namespace MedicalCareApi.Services
                 Token = token,
                 User = _mapper.Map<UserDto>(user)
             };
+        }
+
+        public async Task<UserDto?> UpdateUserAsync(CreateUserRequestDto request)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == request.Email);
+            if (user == null)
+            {
+                return null; // User not found
+            }
+            user.Name = request.Name;
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                user.Password = PasswordHelper.HashPassword(request.Password);
+            }
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserDto>(user);
         }
 
     }

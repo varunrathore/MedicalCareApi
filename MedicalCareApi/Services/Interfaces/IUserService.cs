@@ -9,6 +9,8 @@ namespace MedicalCareApi.Services.Interfaces
         Task<UserDto?> GetUserByIdAsync(int id);
 
         Task<UserDto?> RegisterUserAsync(CreateUserRequestDto request);
-        Task<LoginResponseDto?> LoginAsync(LoginRequestDto request);
+        Task<LoginResponseDto?> LoginUserAsync(LoginRequestDto request);
+
+        Task<UserDto?> UpdateUserAsync(CreateUserRequestDto request);
     }
 }

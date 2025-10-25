@@ -19,7 +19,7 @@ namespace MedicalCareApi.Controllers.Api
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            var response = await _userService.LoginAsync(request);
+            var response = await _userService.LoginUserAsync(request);
             if (response == null)
                 return Unauthorized("Invalid credentials");
 
@@ -30,6 +30,24 @@ namespace MedicalCareApi.Controllers.Api
         public async Task<IActionResult> Register([FromBody] CreateUserRequestDto request)
         {
             var user = await _userService.RegisterUserAsync(request);
+            return Ok(user);
+        }
+
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+            if (user == null)
+                return NotFound("User not found");
+            return Ok(user);
+        }
+
+        [HttpPut("user")]
+        public async Task<IActionResult> UpdateUser([FromBody] CreateUserRequestDto request)
+        {
+            var user = await _userService.UpdateUserAsync(request);
+            if (user == null)
+                return NotFound("User not found");
             return Ok(user);
         }
     }
